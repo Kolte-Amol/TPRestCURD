@@ -28,7 +28,6 @@ import com.rest.curd.domain.User;
  */
 
 @RestController
-@RequestMapping("/UserService")
 public class UserController {
 	
 	UserService userService = new UserService();
@@ -37,39 +36,27 @@ public class UserController {
 	private static final String FAILURE_RESULT="<result>failure</result>";
 
 	
-	@RequestMapping(value="/users", method=RequestMethod.GET, produces = "application/xml")
+	@RequestMapping(value="/users", method=RequestMethod.GET)
 	public List<User> getUsers(){
 	      return userService.getAllUsers();
 	}
 	
 	
-	@RequestMapping(value="/users/{userid}", method=RequestMethod.GET, produces = "application/xml")
-	public User getUser(@PathParam("userid") int userid){
+	@RequestMapping(value="/users/{userid}", method=RequestMethod.GET)
+	public List<User> getUser(@PathParam("userid") int userid){
 	     return userService.getUser(userid);
 	}
 	
 	
-	@RequestMapping(value="/users", method=RequestMethod.POST, produces = "application/xml", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String createUser(@RequestBody MultiValueMap<String, String> formParams, 
-			HttpServletResponse servletResponse) throws IOException{
+	@RequestMapping(value="/users/createuser", method=RequestMethod.POST)
+	public String createUser(@PathParam("name") String name,
+			@PathParam("profession") String profession) throws IOException{
 		
-		User user = new User();
-		 Iterator it = formParams.entrySet().iterator();
-		 while (it.hasNext()) {
-		        Map.Entry pair = (Map.Entry)it.next();
-		        
-		        System.out.println(pair.getKey() + " = " + pair.getValue());
-		       
-		        if(pair.getKey().toString().trim().equalsIgnoreCase("id")){
-		        	user.setId(Integer.parseInt(pair.getValue().toString().trim()));
-		        }else if(pair.getKey().toString().trim().equalsIgnoreCase("name")){
-		        	user.setName(pair.getValue().toString().trim());
-		        }else{
-		        	user.setProfession(pair.getValue().toString().trim());
-		        }
-		        
-		        it.remove(); // avoids a ConcurrentModificationException
-		    }
+			User user = new User();
+			
+			user.setName(name);
+			user.setProfession(profession);
+		
 		
 	      int result = userService.addUser(user);
 	      if(result == 1){
@@ -78,27 +65,15 @@ public class UserController {
 	      return FAILURE_RESULT;
 	  }
 	
-	@RequestMapping(value="/users", method=RequestMethod.PUT, produces = "application/xml", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String updateUser(@RequestBody MultiValueMap<String, String> formParams, 
-			HttpServletResponse servletResponse) throws IOException{
+	@RequestMapping(value="/users/updateuser/{userid}", method=RequestMethod.PUT)
+	public String updateUser(@PathParam("userid") int userid,
+			@PathParam("name") String name,
+					@PathParam("profession") String profession) throws IOException{
+			User user = new User();
 		
-		User user = new User();
-		 Iterator it = formParams.entrySet().iterator();
-		 while (it.hasNext()) {
-		        Map.Entry pair = (Map.Entry)it.next();
-		        
-		        System.out.println(pair.getKey() + " = " + pair.getValue());
-		       
-		        if(pair.getKey().toString().trim().equalsIgnoreCase("id")){
-		        	user.setId(Integer.parseInt(pair.getValue().toString().trim()));
-		        }else if(pair.getKey().toString().trim().equalsIgnoreCase("name")){
-		        	user.setName(pair.getValue().toString().trim());
-		        }else{
-		        	user.setProfession(pair.getValue().toString().trim());
-		        }
-		        
-		        it.remove(); // avoids a ConcurrentModificationException
-		    }
+			user.setId(userid);
+			user.setName(name);
+			user.setProfession(profession);
 		
 	      int result = userService.updateUser(user);
 	      if(result == 1){
@@ -108,7 +83,7 @@ public class UserController {
 	  }
 	
 	
-	@RequestMapping(value="/users/{userid}", method=RequestMethod.DELETE, produces = "application/xml")
+	@RequestMapping(value="/users/deleteuser/{userid}", method=RequestMethod.DELETE)
 	public String deleteUser(@PathParam("userid") int userid){
 	      int result = userService.deleteUser(userid);
 	      if(result == 1){

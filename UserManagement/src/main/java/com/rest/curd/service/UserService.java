@@ -21,7 +21,7 @@ public class UserService {
 		return userDao.getAllUsers();
 	}
 
-	public User getUser(int userid) {
+	public List<User> getUser(int userid) {
 		return userDao.getUser(userid);
 	}
 
@@ -30,13 +30,12 @@ public class UserService {
 	}
 
 	public int updateUser(User user) {
-		// TODO Auto-generated method stub
 		return userDao.updateUser(user);
 	}
 
 	public int deleteUser(int userid) {
-		// TODO Auto-generated method stub
-		return userService.deleteUser(userid);
+		
+		return userDao.deleteUser(userid);
 	}
 
 }
