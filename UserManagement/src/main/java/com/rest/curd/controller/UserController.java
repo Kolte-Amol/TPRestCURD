@@ -14,6 +14,7 @@ import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,19 +44,16 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/users/{userid}", method=RequestMethod.GET)
-	public List<User> getUser(@PathParam("userid") int userid){
+	public List<User> getUser(@PathVariable("userid") int userid){
 	     return userService.getUser(userid);
 	}
 	
 	
 	@RequestMapping(value="/users/createuser", method=RequestMethod.POST)
-	public String createUser(@PathParam("name") String name,
-			@PathParam("profession") String profession) throws IOException{
+	public String createUser(@RequestBody User user) throws IOException{
 		
-			User user = new User();
-			
-			user.setName(name);
-			user.setProfession(profession);
+			System.out.println(user.getName());
+			System.out.println(user.getProfession());
 		
 		
 	      int result = userService.addUser(user);
