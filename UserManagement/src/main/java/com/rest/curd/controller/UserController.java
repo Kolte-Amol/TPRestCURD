@@ -64,15 +64,15 @@ public class UserController {
 	  }
 	
 	@RequestMapping(value="/users/updateuser/{userid}", method=RequestMethod.PUT)
-	public String updateUser(@PathParam("userid") int userid,
-			@PathParam("name") String name,
-					@PathParam("profession") String profession) throws IOException{
-			User user = new User();
+	public String updateUser(@RequestBody User user, 
+			@PathVariable("userid") int userid) throws IOException{
+			//User user = new User();
 		
-			user.setId(userid);
-			user.setName(name);
-			user.setProfession(profession);
-		
+			user.setId(userid);			
+			System.out.println(""+user.getId());
+			System.out.println(user.getName());
+			System.out.println(user.getProfession());
+			
 	      int result = userService.updateUser(user);
 	      if(result == 1){
 	         return SUCCESS_RESULT;
@@ -82,7 +82,8 @@ public class UserController {
 	
 	
 	@RequestMapping(value="/users/deleteuser/{userid}", method=RequestMethod.DELETE)
-	public String deleteUser(@PathParam("userid") int userid){
+	public String deleteUser(@RequestBody User user, 
+			@PathVariable("userid") int userid){
 	      int result = userService.deleteUser(userid);
 	      if(result == 1){
 	         return SUCCESS_RESULT;
