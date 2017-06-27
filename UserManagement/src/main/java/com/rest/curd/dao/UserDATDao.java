@@ -45,12 +45,13 @@ public class UserDATDao {
 	      return userList;
 	   }
 
-	   public User getUser(int id){
+	   public List<User> getUser(int id){
 	      List<User> users = getAllUsers();
 
 	      for(User user: users){
 	         if(user.getId() == id){
-	            return user;
+	        	 users.add(user);
+	            return users;
 	         }
 	      }
 	      return null;
